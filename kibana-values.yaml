@@ -1,0 +1,35 @@
+extraEnvs:
+  - name: "NODE_OPTIONS"
+    value: "--max-old-space-size=1800"
+  - name: "SERVER_BASEPATH"
+    value: "/kibana"
+  - name: "SERVER_REWRITEBASEPATH"
+    value: "false"
+  - name: ELASTICSEARCH_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: elastic-credentials
+        key: password
+  - name: ELASTICSEARCH_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: elastic-credentials
+        key: username
+
+kibanaConfig:
+  kibana.yml: |
+    xpack.encryptedSavedObjects.encryptionKey: "any value for encryption key"
+    server.publicBaseUrl: "https://your domain/kibana"
+
+ingress:
+  enabled: true
+  className: ""
+  pathtype: Prefix
+  annotations: # https://azure.github.io/application-gateway-kubernetes-ingress/annotations/
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+    appgw.ingress.kubernetes.io/appgw-ssl-certificate: "your app gateway cert name"
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - paths:
+        - path: /kibana/
