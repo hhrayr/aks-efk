@@ -1,4 +1,4 @@
-# EFK stuck to the AKS cluster
+# EFK stack for Azure AKS cluster
 
 - Fluent parses json logs
 - Elastic indexes log fields (including nested fields)
